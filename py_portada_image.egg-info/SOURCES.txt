@@ -1,0 +1,9 @@
+setup.py
+py_portada_image/__init__.py
+py_portada_image/deskew_tools.py
+py_portada_image.egg-info/PKG-INFO
+py_portada_image.egg-info/SOURCES.txt
+py_portada_image.egg-info/dependency_links.txt
+py_portada_image.egg-info/not-zip-safe
+py_portada_image.egg-info/requires.txt
+py_portada_image.egg-info/top_level.txt
