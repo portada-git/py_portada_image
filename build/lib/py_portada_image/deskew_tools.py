@@ -96,7 +96,7 @@ def deskewSkimage(skimage):
     dsk.deskewImage()
     return dsk.image
 
-def isSkimageSkewed(skimage, minAngle=0)
+def isSkimageSkewed(skimage, minAngle=0):
     """
     This function return if the image passed by parameter is 
     more skewed then the minAngle indicated by teh second parameter

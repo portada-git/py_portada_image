@@ -1,10 +1,12 @@
 Metadata-Version: 2.1
 Name: py-portada-image
-Version: 0.1
+Version: 0.1.0
 Summary: tools for processing images within the PortADa project
+Home-page: https://github.com/portada-git/py_portada_image
 Author: PortADa team
 Author-email: jcbportada@gmail.com
 License: MIT
+Requires-Python: >=3.9
 Requires-Dist: scikit-image
 Requires-Dist: deskew
 Requires-Dist: numpy
