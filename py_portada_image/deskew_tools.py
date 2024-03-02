@@ -1,4 +1,4 @@
-from skimage import skio
+from skimage import io as skio
 from skimage.color import rgb2gray
 import numpy as np
 from deskew import determine_skew
