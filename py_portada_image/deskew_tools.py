@@ -2,15 +2,17 @@ from skimage import io as skio
 from skimage.color import rgb2gray
 import numpy as np
 from deskew import determine_skew
+from skimage.transform import rotate
+from PIL import Image
 
 
-class deskew_tool(object):
+class DeskewTool(object):
     """
     This class allow to fix an image document with its lines skewed.
     USE EXAMPLE:
-    from py_portada_image.deskew_tools import deskew_tool
+    from py_portada_image.deskew_tools import DeskewTool
 
-    dsk = deskew_tool(input_path="path/image", minAngle=5)
+    dsk = DeskewTool(input_path="path/image", minAngle=5)
     if dsk.isSkewed():
         dsk.deskew()
         dsk.saveImage('new_image_path')
@@ -25,6 +27,7 @@ class deskew_tool(object):
             self.image = None
             self._image_path = ''
 
+
     @property
     def image(self):
         return self._image
@@ -32,6 +35,7 @@ class deskew_tool(object):
     @image.setter
     def image(self, val):
         self._image = val
+        self.__grayscale=None
 
     @property
     def image_path(self):
@@ -40,8 +44,7 @@ class deskew_tool(object):
     @image_path.setter
     def image_path(self, val):
         self._image_path = val
-        self._image = skio.imread(val)
-        self.__grayscale = None
+        self.image = skio.imread(val)
 
     @property
     def minAngle(self):
@@ -51,40 +54,76 @@ class deskew_tool(object):
     def minAngle(self, val):
         self.__minAngle = val
 
-    def verifyImage(self):
+    def __verifyImage(self):
         if self.image is None:
             raise Exception("Error: Image is not specified.")
 
+    def add_margin( self, top, right, bottom, left):
+        pil_img = Image.fromarray(self.image)
+        width, height = pil_img.size
+        new_width = width + right + left
+        new_height = height + top + bottom
+        result = Image.new(pil_img.mode, (new_width, new_height), (255, 255, 255))
+        result.paste(pil_img, (left, top))
+        result = np.array(result)
+        return result
+
     def rgb2gray(self):
+        """
+        convert the image of image attribute to grayscale and save it in __grayscale attribute
+        :return: None
+        """
         if self.__grayscale is None:
-            self.verifyImage()
+            self.__verifyImage()
             if len(self.image.shape) > 2:
                 self.__grayscale = rgb2gray(self.image)
             else:
                 self.__grayscale = np.copy(self.image)
 
     def readImage(self, path):
+        """
+        read the image from 'path' file
+        :param path: the path where the image is
+        :return: None
+        """
         self.image_path = path
 
     def saveImage(self, image_path=''):
+        """
+        Save the image from 'self.image' to 'image_path'. By default image_path is equal to 'self.image_path'
+        :param image_path: the image path where save the image
+        :return: None
+        """
+        self.__verifyImage()
         if len(image_path)==0:
             image_path = self.image_path
         skio.imsave(image_path, self.image)
 
     def isSkewed(self):
+        """
+        Calculate if image is skewed in an angle bigger than self.minAngle
+        :return:
+        """
+        self.__verifyImage()
+        self.rgb2gray()
         angle = determine_skew(self.__grayscale)
         return angle >= self.minAngle
 
     def deskewImage(self):
-        self.verifyImage()
-        if len(self.image.shape) > 2:
-            self.rgb2gray()
+        """
+        Deskew the image from self.image
+        :return:None
+        """
+        self.__verifyImage()
+        self.rgb2gray()
         angle = determine_skew(self.__grayscale)
-        if angle >= self.minAngle:
-            rotated = rotate(self.image, angle, resize=True) * 255
+        if abs(angle) >= self.minAngle:
+            image = self.add_margin(0,30,0,30)
+            rotated = rotate(image, angle, resize=True) * 255
             self.image = rotated.astype(np.uint8)
 
-dsk = deskew_tool
+
+dsk = DeskewTool()
 
 def deskewSkimage(skimage):
     """
