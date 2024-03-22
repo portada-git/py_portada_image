@@ -60,6 +60,17 @@ K = np.array([
     [0, FOCAL_LENGTH, 0],
     [0, 0, 1]], dtype=np.float32)
 
+# Esta función no estaba en el codigo original de Agustín.
+def is_cv2image_equal_to(imga, imgb):
+    """This function checks if two images are equals"""
+    if imga is None or imgb is None:
+        ret = imga is None and imgb is None
+    else:
+        ret = imga.shape == imgb.shape
+        if ret:
+            difference = cv2.subtract(imga, imgb)
+            ret = not np.any(difference)
+    return ret
 
 # Las funciones usadas en local mejor ponerlas también dentro de la clase DewarpTools para evitar que puedan usarse
 # desde fuera de este módulo. Si fuera posible, sería mejor convertirla en un método privado. Por desgracia Python no
@@ -703,7 +714,7 @@ class DewarpTools(object):
     @image_path.setter
     def image_path(self, val):
         self._image_path = val
-        if not val.isspace():
+        if len(val) > 0:
             self._image = cv2.imread(val)
         else:
             self._image = None
@@ -724,7 +735,7 @@ class DewarpTools(object):
             self.image = image
             self._are_params_calculated = False
         elif image is not None:
-            if image != self._image:
+            if not is_cv2image_equal_to(image, self.image):
                 self.image = image
                 self._are_params_calculated = False
         else:
@@ -784,7 +795,7 @@ class DewarpTools(object):
     def is_image_curved(self):
         if not self._are_params_calculated:
             self.__calculate_params()
-        ret = len(self._spans) < 1 or abs(self._params[0]) < 0.1 and abs(self._params[1]) < 0.1 and abs(
+        ret = len(self._spans) >= 1 and abs(self._params[0]) < 0.1 and abs(self._params[1]) < 0.1 and abs(
             self._params[2]) < 0.1
         return ret
 
@@ -812,13 +823,14 @@ dwp = DewarpTools()
 
 
 def dewarp_cv2image(cv2img):
-    dwp.restart(cv2img)
+    dwp.restart(image=cv2img)
     dwp.dewarp_image()
+    return dwp.image
 
 
 def is_cv2image_curve(cv2img):
-    dwp.restart(cv2img)
-    dwp.is_image_curved()
+    dwp.restart(image=cv2img)
+    return dwp.is_image_curved()
 
 
 def dewarp_cv2image_file(input_path, output_path=''):

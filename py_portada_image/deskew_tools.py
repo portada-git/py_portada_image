@@ -107,7 +107,7 @@ class DeskewTool(object):
         self.__verifyImage()
         self.rgb2gray()
         angle = determine_skew(self.__grayscale)
-        return angle >= self.minAngle
+        return abs(angle) >= self.minAngle
 
     def deskewImage(self):
         """
