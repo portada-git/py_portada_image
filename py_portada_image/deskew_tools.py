@@ -1,4 +1,4 @@
-from skimage import io as skio
+from skimage import io as sk_io
 from skimage.color import rgb2gray
 import numpy as np
 from deskew import determine_skew
@@ -17,16 +17,16 @@ class DeskewTool(object):
         dsk.deskew()
         dsk.saveImage('new_image_path')
     """
-    def __init__(self, input_path='', minAngle=0.1):
+
+    def __init__(self, input_path='', min_angle=0.1):
         self.__grayscale = None
-        self.__minAngle = minAngle
+        self.__minAngle = min_angle
         if len(input_path) > 0:
             self._image_path = input_path
-            self._image = skio.imread(input_path)
+            self._image = sk_io.imread(input_path)
         else:
             self.image = None
             self._image_path = ''
-
 
     @property
     def image(self):
@@ -35,7 +35,7 @@ class DeskewTool(object):
     @image.setter
     def image(self, val):
         self._image = val
-        self.__grayscale=None
+        self.__grayscale = None
 
     @property
     def image_path(self):
@@ -44,7 +44,7 @@ class DeskewTool(object):
     @image_path.setter
     def image_path(self, val):
         self._image_path = val
-        self.image = skio.imread(val)
+        self.image = sk_io.imread(val)
 
     @property
     def minAngle(self):
@@ -58,7 +58,7 @@ class DeskewTool(object):
         if self.image is None:
             raise Exception("Error: Image is not specified.")
 
-    def add_margin( self, top, right, bottom, left):
+    def add_margin(self, top, right, bottom, left):
         pil_img = Image.fromarray(self.image)
         width, height = pil_img.size
         new_width = width + right + left
@@ -90,14 +90,14 @@ class DeskewTool(object):
 
     def saveImage(self, image_path=''):
         """
-        Save the image from 'self.image' to 'image_path'. By default image_path is equal to 'self.image_path'
+        Save the image from 'self.image' to 'image_path'. By default, image_path is equal to 'self.image_path'
         :param image_path: the image path where save the image
         :return: None
         """
         self.__verifyImage()
-        if len(image_path)==0:
+        if len(image_path) == 0:
             image_path = self.image_path
-        skio.imsave(image_path, self.image)
+        sk_io.imsave(image_path, self.image)
 
     def isSkewed(self):
         """
@@ -111,19 +111,20 @@ class DeskewTool(object):
 
     def deskewImage(self):
         """
-        Deskew the image from self.image
+        Deskew the image from self.image.
         :return:None
         """
         self.__verifyImage()
         self.rgb2gray()
         angle = determine_skew(self.__grayscale)
         if abs(angle) >= self.minAngle:
-            image = self.add_margin(0,30,0,30)
+            image = self.add_margin(0, 30, 0, 30)
             rotated = rotate(image, angle, resize=True) * 255
             self.image = rotated.astype(np.uint8)
 
 
 dsk = DeskewTool()
+
 
 def deskewSkimage(skimage):
     """
@@ -131,21 +132,23 @@ def deskewSkimage(skimage):
     :param skimage: image read by skimage.io.imread
     :return: the image fixed
     """
-    dsk.image=skimage
+    dsk.image = skimage
     dsk.deskewImage()
     return dsk.image
 
-def isSkimageSkewed(skimage, minAngle=0):
+
+def isSkimageSkewed(skimage, min_angle=0):
     """
     This function return if the image passed by parameter is 
-    more skewed then the minAngle indicated by teh second parameter
-    :param minAngle: Minimum angle from which correction is required
+    more skewed than the minAngle indicated by the second parameter
+    :param min_angle: Minimum angle from which correction is required
     :param skimage: image read by skimage.io.imread
     :return: 
     """
-    dsk.image=skimage
-    dsk.minAngle = minAngle
+    dsk.image = skimage
+    dsk.minAngle = min_angle
     return dsk.isSkewed()
+
 
 def deskewImageFile(input_path, output_path=''):
     """
@@ -153,10 +156,11 @@ def deskewImageFile(input_path, output_path=''):
     deskew the image and save the fixed image in output_path if it is
     not empty or using the same input_path elsewhere.
     :param input_path: path where thw image is
-    :param output_path: path to be used to save teh fixed image. By default
+    :param output_path: path to be used to save teh fixed image. By default, output_path
+    has the same value as input_path
     output_path = input_path
     :return: None
     """
-    dsk.image_path=input_path
+    dsk.image_path = input_path
     dsk.deskewImage()
     dsk.saveImage(output_path)

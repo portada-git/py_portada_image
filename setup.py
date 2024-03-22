@@ -8,11 +8,14 @@ setup(name='py_portada_image',
     license='MIT',
     url="https://github.com/portada-git/py_portada_image",
     packages=['py_portada_image'],
-    py_modules=['deskew_tools'],
+    py_modules=['deskew_tools','dewarp_tools'],
     install_requires=[ 
         'scikit-image',
         'deskew',
-        'numpy'
+        'numpy >= 1.21,<2',
+        'pillow',
+        'scipy',
+        'opencv-python >= 4.8,<4.9'
     ], 
     python_requires='>=3.9',
     zip_safe=False)
