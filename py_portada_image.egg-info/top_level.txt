@@ -1,2 +1,3 @@
 deskew_tools
+dewarp_tools
 py_portada_image

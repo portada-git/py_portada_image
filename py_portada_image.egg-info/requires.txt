@@ -1,3 +1,6 @@
 scikit-image
 deskew
-numpy
+numpy<2,>=1.21
+pillow
+scipy
+opencv-python<4.9,>=4.8
