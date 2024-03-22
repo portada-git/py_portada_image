@@ -815,7 +815,7 @@ class DewarpTools(object):
         """
         self.image_path = path
 
-    def save_mage(self, image_path=''):
+    def save_image(self, image_path=''):
         """
         Save the image from 'self.image' to 'image_path'. By default, image_path is equal to 'self.image_path'
         :param image_path: the image path where save the image
@@ -844,4 +844,4 @@ def is_cv2image_curve(cv2img):
 def dewarp_image_file(input_path, output_path=''):
     dwp.restart(input_path)
     dwp.dewarp_image()
-    dwp.save_mage(output_path)
+    dwp.save_image(output_path)

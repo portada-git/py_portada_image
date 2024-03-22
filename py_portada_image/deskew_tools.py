@@ -20,10 +20,10 @@ class DeskewTool(object):
     USE EXAMPLE:
     from py_portada_image.deskew_tools import DeskewTool
 
-    dsk = DeskewTool(input_path="path/image", minAngle=5)
-    if dsk.isSkewed():
+    dsk = DeskewTool(input_path="path/image", min_angle=5)
+    if dsk.is_skewed():
         dsk.deskew()
-        dsk.saveImage('new_image_path')
+        dsk.save_image('new_image_path')
     """
 
     def __init__(self, input_path='', min_angle=0.1):
@@ -55,11 +55,11 @@ class DeskewTool(object):
         self.image = sk_io.imread(val)
 
     @property
-    def minAngle(self):
+    def min_angle(self):
         return self.__minAngle
 
-    @minAngle.setter
-    def minAngle(self, val):
+    @min_angle.setter
+    def min_angle(self, val):
         self.__minAngle = val
 
     def __verifyImage(self):
@@ -88,7 +88,7 @@ class DeskewTool(object):
             else:
                 self.__grayscale = np.copy(self.image)
 
-    def readImage(self, path):
+    def read_image(self, path):
         """
         read the image from 'path' file
         :param path: the path where the image is
@@ -96,7 +96,7 @@ class DeskewTool(object):
         """
         self.image_path = path
 
-    def saveImage(self, image_path=''):
+    def save_image(self, image_path=''):
         """
         Save the image from 'self.image' to 'image_path'. By default, image_path is equal to 'self.image_path'
         :param image_path: the image path where save the image
@@ -107,17 +107,17 @@ class DeskewTool(object):
             image_path = self.image_path
         sk_io.imsave(image_path, self.image)
 
-    def isSkewed(self):
+    def is_skewed(self):
         """
-        Calculate if image is skewed in an angle bigger than self.minAngle
+        Calculate if image is skewed in an angle bigger than self.min_angle
         :return:
         """
         self.__verifyImage()
         self.rgb2gray()
         angle = determine_skew(self.__grayscale)
-        return abs(angle) >= self.minAngle
+        return abs(angle) >= self.min_angle
 
-    def deskewImage(self):
+    def deskew_image(self):
         """
         Deskew the image from self.image.
         :return:None
@@ -125,7 +125,7 @@ class DeskewTool(object):
         self.__verifyImage()
         self.rgb2gray()
         angle = determine_skew(self.__grayscale)
-        if abs(angle) >= self.minAngle:
+        if abs(angle) >= self.min_angle:
             image = self.add_margin(0, 30, 0, 30)
             rotated = rotate(image, angle, resize=True) * 255
             self.image = rotated.astype(np.uint8)
@@ -141,21 +141,21 @@ def deskew_skimage(skimage):
     :return: the image fixed
     """
     dsk.image = skimage
-    dsk.deskewImage()
+    dsk.deskew_image()
     return dsk.image
 
 
 def is_skimage_skewed(skimage, min_angle=0):
     """
     This function return if the image passed by parameter is 
-    more skewed than the minAngle indicated by the second parameter
+    more skewed than the min_angle indicated by the second parameter
     :param min_angle: Minimum angle from which correction is required
     :param skimage: image read by skimage.io.imread
     :return: 
     """
     dsk.image = skimage
-    dsk.minAngle = min_angle
-    return dsk.isSkewed()
+    dsk.min_angle = min_angle
+    return dsk.is_skewed()
 
 
 def deskew_image_file(input_path, output_path=''):
@@ -170,5 +170,5 @@ def deskew_image_file(input_path, output_path=''):
     :return: None
     """
     dsk.image_path = input_path
-    dsk.deskewImage()
-    dsk.saveImage(output_path)
+    dsk.deskew_image()
+    dsk.save_image(output_path)
