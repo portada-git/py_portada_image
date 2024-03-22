@@ -1,3 +1,11 @@
+#==========================================
+# Title:  Dewarp tools for images
+# Project: PortADa project
+# Author: Agustí Nieto, Josep Cañellas
+# Based on: Based on work of Matt Zucker in https://mzucker.github.io/2016/08/15/page-dewarping.html
+# Date:   Mach 2024
+#==========================================
+
 import datetime
 from builtins import int
 import cv2
@@ -833,7 +841,7 @@ def is_cv2image_curve(cv2img):
     return dwp.is_image_curved()
 
 
-def dewarp_cv2image_file(input_path, output_path=''):
+def dewarp_image_file(input_path, output_path=''):
     dwp.restart(input_path)
     dwp.dewarp_image()
     dwp.save_mage(output_path)

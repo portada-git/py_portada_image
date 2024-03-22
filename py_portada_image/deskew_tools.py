@@ -1,3 +1,11 @@
+#==========================================
+# Title:  Deskew tools for images
+# Project: PortADa project
+# Author: Josep Cañellas
+# Date:   Mach 2024
+#==========================================
+
+
 from skimage import io as sk_io
 from skimage.color import rgb2gray
 import numpy as np
@@ -126,7 +134,7 @@ class DeskewTool(object):
 dsk = DeskewTool()
 
 
-def deskewSkimage(skimage):
+def deskew_skimage(skimage):
     """
     This function deskew the image passed by parameter
     :param skimage: image read by skimage.io.imread
@@ -137,7 +145,7 @@ def deskewSkimage(skimage):
     return dsk.image
 
 
-def isSkimageSkewed(skimage, min_angle=0):
+def is_skimage_skewed(skimage, min_angle=0):
     """
     This function return if the image passed by parameter is 
     more skewed than the minAngle indicated by the second parameter
@@ -150,7 +158,7 @@ def isSkimageSkewed(skimage, min_angle=0):
     return dsk.isSkewed()
 
 
-def deskewImageFile(input_path, output_path=''):
+def deskew_image_file(input_path, output_path=''):
     """
     This function read the image file passed as the first parameter,
     deskew the image and save the fixed image in output_path if it is
