@@ -5,7 +5,7 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
 
 setup(name='py_portada_image',
-    version='0.1.6',
+    version='0.1.7',
     description='tools for processing images within the PortADa project',
     author='PortADa team',
     author_email='jcbportada@gmail.com',

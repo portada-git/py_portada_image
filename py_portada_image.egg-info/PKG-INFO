@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
-Name: py_portada_image
-Version: 0.1.6
+Name: py-portada-image
+Version: 0.1.7
 Summary: tools for processing images within the PortADa project
 Home-page: https://github.com/portada-git/py_portada_image
 Author: PortADa team
@@ -9,12 +9,6 @@ License: MIT
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE.txt
-Requires-Dist: scikit-image
-Requires-Dist: deskew
-Requires-Dist: numpy<2,>=1.21
-Requires-Dist: pillow
-Requires-Dist: scipy
-Requires-Dist: opencv-python<4.9,>=4.8
 
 # py_portada_image
 

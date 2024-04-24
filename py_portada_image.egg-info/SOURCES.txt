@@ -1,5 +1,6 @@
 LICENSE.txt
 README.md
+pyproject.toml
 setup.py
 py_portada_image/__init__.py
 py_portada_image/deskew_tools.py

@@ -71,7 +71,11 @@ class DeskewTool(object):
         width, height = pil_img.size
         new_width = width + right + left
         new_height = height + top + bottom
-        result = Image.new(pil_img.mode, (new_width, new_height), (255, 255, 255))
+        if pil_img.mode=='L':
+            color = 255
+        else:
+            color = (255, 255, 255)
+        result = Image.new(pil_img.mode, (new_width, new_height), color)
         result.paste(pil_img, (left, top))
         result = np.array(result)
         return result
