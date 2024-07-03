@@ -128,7 +128,7 @@ class DeskewTool(object):
         """
         self.__verifyImage()
         self.rgb2gray()
-        angle = determine_skew(self.__grayscale)
+        angle = determine_skew(self.__grayscale, max_angle=44, min_angle=-44)
         if abs(angle) >= self.min_angle:
             image = self.add_margin(0, 30, 0, 30)
             rotated = rotate(image, angle, resize=True) * 255
